@@ -67,18 +67,18 @@ def align_point_clouds(source, target, threshold=0.02, max_iteration=2000):
 feature_extractor = GLPNImageProcessor.from_pretrained("vinvino02/glpn-nyu")
 model = GLPNForDepthEstimation.from_pretrained("vinvino02/glpn-nyu")
 
-front_pcd = process_image("front.png", model, feature_extractor)
-back_pcd = process_image("back.png", model, feature_extractor)
+front_pcd = process_image("rab2.png", model, feature_extractor)
+#back_pcd = process_image("back.png", model, feature_extractor)
 
 # Align the back point cloud to the front point cloud using ICP
-transformation_matrix = align_point_clouds(back_pcd, front_pcd)
-back_pcd.transform(transformation_matrix)
+#transformation_matrix = align_point_clouds(back_pcd, front_pcd)
+#back_pcd.transform(transformation_matrix)
 
 # Merge the point clouds
-merged_pcd = front_pcd + back_pcd
+# merged_pcd = front_pcd + back_pcd
 
 # Surface reconstruction
-poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(merged_pcd, depth=10, n_threads=1)[0]
+poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(front_pcd, depth=10, n_threads=1)[0]
 
 # Rotate the mesh
 rotation_matrix = poisson_mesh.get_rotation_matrix_from_xyz((np.pi, 0, 0))
